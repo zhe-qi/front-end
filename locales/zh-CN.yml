@@ -1,0 +1,13 @@
+button:
+  about: 关于
+  back: 返回
+  go: 确定
+  home: 首页
+  toggle_dark: 切换深色模式
+  toggle_langs: 切换语言
+intro:
+  dynamic-route: 动态路由演示
+  aka: 也叫
+not-found: 未找到页面
+
+帮助: 帮助
