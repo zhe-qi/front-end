@@ -1,25 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { Ref } from 'vue'
-import { resetRouter } from '@/router'
-
-const router = useRouter()
-
-/* 刷新页面时添加路由 */
-if (localStorage.getItem('token')) {
-  resetRouter()
-  const routes = JSON.parse(localStorage.getItem('routes')!, (_key, value) => {
-    if (value && typeof value === 'string') {
-      return value.includes('thisFunction')
-      // eslint-disable-next-line no-new-func
-        ? new Function(`return ${value.replace('thisFunction', '')}`)()
-        : value
-    }
-    return value
-  })
-  router.addRoute(routes)
-  router.replace(localStorage.getItem('currentPath') || '/homePage')
-}
 
 useHead({
   title: '在线答题系统'

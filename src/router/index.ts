@@ -1,6 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import nprogress from 'nprogress'
+import { usePiniaUserPermission } from '@/store/useUserPermission'
 import { constantRoutes } from './routes'
+
+const store = usePiniaUserPermission()
 
 // 白名单应该包含基本静态路由
 const WHITE_NAME_LIST: string[] = []
@@ -24,15 +27,29 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  if (store.isRef) {
+    /* 刷新页面时添加路由 */
+    if (localStorage.getItem('token')) {
+      resetRouter()
+      const routes = JSON.parse(localStorage.getItem('routes')!, (_key, value) => {
+        if (value && typeof value === 'string') {
+          return value.includes('thisFunction')
+          // eslint-disable-next-line no-new-func
+            ? new Function(`return ${value.replace('thisFunction', '')}`)()
+            : value
+        }
+        return value
+      })
+      router.addRoute(routes)
+      router.replace(localStorage.getItem('currentPath') || '/homePage')
+    }
+    store.isRef = false
+  }
   if (to.path !== from.path) nprogress.start()
   const token = localStorage.getItem('token')
-  if (to.path === '/login' || to.path === '/404' || to.path === '/register') {
-    if (token)
-      router.push('/homePage')
-    else
-      next()
-  }
-  else { token ? next() : next('/login') }
+  const path = ['/login', '/404', '/register']
+  if (path.includes(to.path)) token ? router.push('/homePage') : next()
+  else token ? next() : next('/login')
 })
 
 router.afterEach((to) => {

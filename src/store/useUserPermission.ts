@@ -63,8 +63,10 @@ const menus: Menus[] = [
 export const useUserPermission = defineStore('useUserPermission', {
   state: (): {
     routes: RouteRecordRaw[]
+    isRef: boolean
   } => ({
-    routes: []
+    routes: [],
+    isRef: true
   }),
   actions: {
     generateRoutes(roles: string) {

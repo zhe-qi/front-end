@@ -62,5 +62,6 @@ export const asyncRoutes: RouteRecordRaw[] = [
     path: '/result',
     name: 'result',
     component: () => import('@/views/answerPage/Result.vue'),
+    meta: { roles: ['admin', 'user'] }
   }
 ]
